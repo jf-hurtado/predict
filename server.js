@@ -1,12 +1,15 @@
 // server.js
 // Entry point del servicio PREDICT
 
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const predictRoutes = require("./routes/predictRoutes");
 const { initModel } = require("./services/tfModelService");
 
 const PORT = process.env.PORT || 3002;
+const MODEL_VERSION = process.env.MODEL_VERSION || "v1.0";
 
 const app = express();
 app.use(express.json());
