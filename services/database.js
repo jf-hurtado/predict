@@ -1,4 +1,8 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+const { Prediction } = require('../models/predictionModel.js');
+
+//import mongoose from 'mongoose';
+//import Prediction from '../models/predictionModel.js'; 
 
 const connectDB = async () => {
     try {
@@ -11,4 +15,23 @@ const connectDB = async () => {
     }
 };
 
-export default connectDB;
+const savePrediction = async (data) => {
+    try{
+        // Objeto 'genérico' que creamos
+        const newPrediction = new Prediction(data);
+
+        // Objeto que me devuelve la DB trás haberlo guardado
+        const saved = await newPrediction.save();
+
+        console.log(`[DB] Prediccion guardada con exito en la DB`, saved._id);
+        return saved;
+    } catch(err) {
+        console.log('[DB] ERROR al guardar la prediccion', err);
+        throw err;
+    }
+};
+
+module.exports = { 
+    connectDB, 
+    savePrediction 
+};

@@ -1,12 +1,22 @@
-import mongoose from 'mongoose';
-const { Schema, model} = mongoose;
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const prediction = new Schema({
-    features: Array,
-    meta: Object,
+    features: {
+        type: Array,
+        required: true
+    },
+    meta: {
+        type: Object,
+        required: true
+    },
+    prediction: {
+        type: Number,
+        required: true
+    }
 }, {
     timestamps: true
 });
 
-const Prediction = model('Prediction', prediction);
-export default Prediction;
+const Prediction = mongoose.model('Prediction', prediction);
+module.exports = { Prediction };

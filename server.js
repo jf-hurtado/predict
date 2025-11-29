@@ -7,7 +7,7 @@ const express = require("express");
 const path = require("path");
 const predictRoutes = require("./routes/predictRoutes");
 const { initModel } = require("./services/tfModelService");
-const { default: connectDB } = require("./services/database");
+const { connectDB } = require("./services/database");
 
 const PORT = process.env.PORT || 3002;
 const MODEL_VERSION = process.env.MODEL_VERSION || "v1.0";
@@ -25,7 +25,7 @@ app.use("/", predictRoutes);
 // Arranque del servidor + carga del modelo + conexion DB
 const startServer = async () => {
   try{
-    connectDB();
+    await connectDB();
     
     app.listen(PORT, async () => {
       const serverUrl = `http://localhost:${PORT}`;
@@ -40,6 +40,7 @@ const startServer = async () => {
     });
   } catch(err) {
     console.log(`[DB] Error conectandose con la DB`, err);
+    process.exit(1);
   }
       
 };
