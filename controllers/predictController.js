@@ -1,4 +1,6 @@
 // controllers/predictController.js
+import { Prediction } from '../models/predictionModel.js';
+
 const { getModelInfo, predict } = require("../services/tfModelService");
 
 function health(req, res) {
@@ -46,7 +48,7 @@ async function doPredict(req, res) {
       return res.status(400).json({ error: "Missing meta object" });
     }
 
-    const { featureCount } = meta;
+    const { featureCount, dataId } = meta;
 
     if (featureCount !== info.inputDim) {
       return res.status(400).json({
@@ -64,9 +66,15 @@ async function doPredict(req, res) {
     const latencyMs = Date.now() - start;
     const timestamp = new Date().toISOString();
 
+    const prediction_object = await Prediction.create({
+      features,
+      meta
+    })
+
     // De momento sin MongoDB → predictionId null
     res.status(201).json({
-      predictionId: null,
+      predictionId: dataId,
+      prediction_object,
       prediction,
       timestamp,
       latencyMs
