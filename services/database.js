@@ -31,7 +31,19 @@ const savePrediction = async (data) => {
     }
 };
 
+const getPrediction = async (id) => {
+    try{
+        const prediction = await Prediction.findById(id);
+        return prediction;
+        
+    } catch(err) {
+        console.log('[DB] ERROR obteniendo prediccion', err);
+        throw err;
+    }
+}
+
 module.exports = { 
     connectDB, 
-    savePrediction 
+    savePrediction,
+    getPrediction
 };

@@ -87,8 +87,24 @@ async function doPredict(req, res) {
   }
 }
 
+async function getPredict(req, res) {
+  const id = req.params.id 
+  try{
+    const prediction = await database.getPrediction(id);
+    if (prediction === null){
+      return res.status(404).json({error: `Error en la petición del cliente. No se encuentra ninguna predicción con el id ${id}`})
+    } 
+    res.status(200).json({prediction})
+
+  } catch(err) {
+    console.error(`Error en /predict/${id}`, err)
+    res.status(500).json({error: 'Error interno del servidor'})
+  }
+}
+
 module.exports = {
   health,
   ready,
-  doPredict
+  doPredict,
+  getPredict
 };
